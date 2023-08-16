@@ -19,10 +19,8 @@ public class App_Assignment2{
         final String LINE="-".repeat(40);
         final String ERROR_MSG=String.format("%s%s%s",COLOR_RED_BOLD,"%s",RESET);
         final String SUCCESS_MSG=String.format("%s%s%s",COLOR_GREEN_BOLD,"%s",RESET);
-        int[] accountId=new int[0];
-        String[] accountName=new String[0];
-        double[] accountBalance=new double[0];
 
+        String[][] accountDetails=new String[0][];
 
         do{
             final String APP_TITLE=String.format("%s%s%s",COLOR_BLUE_BOLD,screen,RESET);
@@ -51,17 +49,16 @@ public class App_Assignment2{
                     case 4: screen=TRANSFER_MONEY;break;
                     case 5: screen=ACCOUNT_BALANCE;break;
                     case 6: screen=DELETE_ACCOUNT;break;
-                    case 7: System.exit(0);
+                    case 7: System.out.println(CLEAR); System.exit(0);
                     default: continue;
                 }
                 break;
                 
                 case OPEN_ACCOUNT:
-                    String id;
                     String name;
-                    int deposit;
+                    String deposit;
                     boolean valid;
-                    System.out.printf("ID : SDB-%05d \n",accountId.length+1);
+                    System.out.printf("ID : SDB-%05d \n",accountDetails.length+1);
 
                     //Name Validation
                     do{
@@ -88,9 +85,9 @@ public class App_Assignment2{
                 do{
                     valid=true;
                     System.out.print("Initial Deposit : ");
-                    deposit=SCANNER.nextInt();
-                    SCANNER.nextLine();
-                    if(deposit<5000){
+                    deposit=SCANNER.nextLine();
+
+                    if(Integer.valueOf(deposit)<5000){
                         System.out.printf(ERROR_MSG+"\n","Insuficient amount");
                         System.out.printf(ERROR_MSG+"\n","Please deposit at least Rs.5,000.00");
                         valid=false;
@@ -99,27 +96,22 @@ public class App_Assignment2{
 
                 }while(!valid);
 
-                int[] newAccountId=new int[accountId.length+1];
-                String[] newAccountName=new String[accountId.length+1];
-                double[] newAccountBalance=new double[accountId.length+1];
+                String[][] newAccountDetails=new String[accountDetails.length+1][3];
 
+                for(int i=0;i<newAccountDetails.length-1;i++){
+                    newAccountDetails[i]=accountDetails[i];
+                }
 
-                    for(int i=0;i<newAccountId.length-1;i++){
-                        newAccountId[i]=accountId[i];
-                        newAccountName[i]=accountName[i];
-                        newAccountBalance[i]=accountBalance[i];
-                    }
-                    newAccountId[newAccountId.length-1]=newAccountId.length+1;
-                    newAccountName[newAccountName.length-1]=name;
-                    newAccountBalance[newAccountBalance.length-1]=deposit;
+                newAccountDetails[newAccountDetails.length-1][0]=newAccountDetails.length+"";
+                newAccountDetails[newAccountDetails.length-1][1]=name;
+                newAccountDetails[newAccountDetails.length-1][2]=deposit;
 
-                    accountId=newAccountId;
-                    accountName=newAccountName;
-                    accountBalance=newAccountBalance;
+                accountDetails=newAccountDetails;
 
-                    System.out.printf(SUCCESS_MSG,String.format("Account SDB-%05d for %s has been created sucessfully.\nDo you want to add new student (Y/n)? ",accountId.length,name));
-                    if (SCANNER.nextLine().strip().toUpperCase().equals("Y")) continue;
-                    screen = DASHBOARD;
+                System.out.printf(SUCCESS_MSG,String.format("Account SDB-%05d for %s has been created sucessfully.\n",accountDetails.length,name));
+                System.out.print("Do you want to add new student (Y/n)? ");
+                if (SCANNER.nextLine().strip().toUpperCase().equals("Y")) continue;
+                screen = DASHBOARD;
 
                 break;
 
